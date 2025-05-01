@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Контакты - VKmebel</title>
+  <meta name="description" content="Контактная информация компании VKmebel - адреса, телефоны, схема проезда">
+  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Шапка сайта -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">VKmebel</a>
+
+        <nav class="main-nav">
+          <a href="/catalog.html" class="nav-link">Каталог</a>
+          <a href="/design.html" class="nav-link">Дизайн</a>
+          <a href="/renovation.html" class="nav-link">Ремонт</a>
+          <a href="/about.html" class="nav-link">О нас</a>
+          <a href="/contact.html" class="nav-link">Контакты</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="btn btn-outline phone-btn" id="contactBtn">
+            <i class="fas fa-phone"></i>
+            <span>+7 (999) 123-45-67</span>
+          </button>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <nav class="mobile-nav">
+          <a href="/catalog.html" class="nav-link">Каталог</a>
+          <a href="/design.html" class="nav-link">Дизайн</a>
+          <a href="/renovation.html" class="nav-link">Ремонт</a>
+          <a href="/about.html" class="nav-link">О нас</a>
+          <a href="/contact.html" class="nav-link">Контакты</a>
+        </nav>
+        <div class="mobile-actions">
+          <button class="btn btn-outline phone-btn" id="mobileContactBtn">
+            <i class="fas fa-phone"></i>
+            <span>+7 (999) 123-45-67</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Заголовок страницы -->
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title">Контакты</h1>
+        <p class="page-description">Свяжитесь с нами любым удобным способом</p>
+      </div>
+    </section>
+
+    <!-- Контактная информация -->
+    <section class="contact-section">
+      <div class="container">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <h3>Адрес</h3>
+              <p>г. Москва, ул. Примерная, д. 123</p>
+              <p>Ежедневно с 9:00 до 20:00</p>
+            </div>
+            
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <h3>Телефон</h3>
+              <p>+7 (999) 123-45-67</p>
+              <p>+7 (999) 765-43-21</p>
+            </div>
+            
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <h3>Email</h3>
+              <p>info@vkmebel.ru</p>
+              <p>sales@vkmebel.ru</p>
+            </div>
+            
+            <div class="contact-card">
+              <div class="contact-icon">
+                <i class="fas fa-clock"></i>
+              </div>
+              <h3>Режим работы</h3>
+              <p>Пн-Пт: 9:00-20:00</p>
+              <p>Сб-Вс: 10:00-18:00</p>
+            </div>
+          </div>
+          
+          <div class="contact-form-container">
+            <h2>Напишите нам</h2>
+            <p>Заполните форму, и мы свяжемся с вами в ближайшее время</p>
+            
+            <form class="contact-form">
+              <div class="form-group">
+                <label for="contact-name">Ваше имя</label>
+                <input type="text" id="contact-name" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-phone">Телефон</label>
+                <input type="tel" id="contact-phone" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-email">Email</label>
+                <input type="email" id="contact-email" class="form-input" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-subject">Тема</label>
+                <select id="contact-subject" class="form-input">
+                  <option value="consultation">Консультация</option>
+                  <option value="order">Заказ мебели</option>
+                  <option value="design">Дизайн интерьера</option>
+                  <option value="renovation">Ремонт</option>
+                  <option value="other">Другое</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="contact-message">Сообщение</label>
+                <textarea id="contact-message" class="form-input" rows="5" required></textarea>
+              </div>
+              
+              <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Карта -->
+    <section class="map-section">
+      <div class="container">
+        <h2 class="section-title">Как нас найти</h2>
+        <div class="map-container">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2245.3069041436495!2d37.618675!3d55.753033!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54a50b315e573%3A0xa886bf5a3d9b2e68!2z0JzQvtGB0LrQvtCy0YHQutC40Lkg0JrRgNC10LzQu9GM!5e0!3m2!1sru!2sru!4v1620144533409!5m2!1sru!2sru" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Подвал сайта -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <h3 class="footer-title">VKmebel</h3>
+          <p class="footer-text">Создаем уютные и функциональные пространства с индивидуальным подходом к каждому клиенту.</p>
+          <div class="social-links">
+            <button class="btn-icon">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+            <button class="btn-icon">
+              <i class="fab fa-instagram"></i>
+            </button>
+            <button class="btn-icon">
+              <i class="fab fa-twitter"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <h3 class="footer-title">Навигация</h3>
+          <ul class="footer-links">
+            <li><a href="/catalog.html">Каталог</a></li>
+            <li><a href="/design.html">Дизайн</a></li>
+            <li><a href="/renovation.html">Ремонт</a></li>
+            <li><a href="/about.html">О нас</a></li>
+            <li><a href="/contact.html">Контакты</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h3 class="footer-title">Контакты</h3>
+          <ul class="footer-info">
+            <li>г. Москва, ул. Примерная, д. 123</li>
+            <li>+7 (999) 123-45-67</li>
+            <li>info@vkmebel.ru</li>
+            <li>Пн-Пт: 9:00-20:00</li>
+            <li>Сб-Вс: 10:00-18:00</li>
+          </ul>
+        </div>
+
+        <div class="footer-subscribe">
+          <h3 class="footer-title">Подписка на новости</h3>
+          <p class="footer-text">Подпишитесь на нашу рассылку, чтобы получать новости о скидках и акциях.</p>
+          <div class="subscribe-form">
+            <input type="email" placeholder="Ваш email" class="form-input">
+            <button class="btn btn-primary">Подписаться</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© <span id="currentYear"></span> VKmebel. Все права защищены.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Модальное окно "Связаться с нами" -->
+  <div class="modal" id="contactModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Связаться с нами</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Ваше имя</label>
+            <input type="text" id="name" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Сообщение</label>
+            <textarea id="message" class="form-input" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

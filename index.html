@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VKmebel - Мебель, Дизайн и Ремонт</title>
+  <meta name="description" content="Магазин мебели, услуги дизайна интерьера и ремонта под ключ">
+  <link rel="stylesheet" href="styles/styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <!-- Шапка сайта -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <a href="/" class="logo">VKmebel</a>
+
+        <nav class="main-nav">
+          <a href="/catalog.html" class="nav-link">Каталог</a>
+          <a href="/design.html" class="nav-link">Дизайн</a>
+          <a href="/renovation.html" class="nav-link">Ремонт</a>
+          <a href="/about.html" class="nav-link">О нас</a>
+          <a href="/contact.html" class="nav-link">Контакты</a>
+        </nav>
+
+        <div class="header-actions">
+          <button class="btn btn-outline phone-btn" id="contactBtn">
+            <i class="fas fa-phone"></i>
+            <span>+7 (999) 123-45-67</span>
+          </button>
+        </div>
+
+        <button class="menu-toggle" id="menuToggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu">
+        <nav class="mobile-nav">
+          <a href="/catalog.html" class="nav-link">Каталог</a>
+          <a href="/design.html" class="nav-link">Дизайн</a>
+          <a href="/renovation.html" class="nav-link">Ремонт</a>
+          <a href="/about.html" class="nav-link">О нас</a>
+          <a href="/contact.html" class="nav-link">Контакты</a>
+        </nav>
+        <div class="mobile-actions">
+          <button class="btn btn-outline phone-btn" id="mobileContactBtn">
+            <i class="fas fa-phone"></i>
+            <span>+7 (999) 123-45-67</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Герой-секция -->
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container">
+        <div class="hero-content">
+          <h1>Создайте дом своей мечты</h1>
+          <p>Мы предлагаем полный спектр услуг: от дизайна интерьера и продажи мебели до ремонта под ключ.</p>
+          <div class="hero-buttons">
+            <a href="/catalog.html" class="btn btn-primary">Смотреть каталог</a>
+            <a href="/design.html" class="btn btn-outline">Заказать дизайн</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Категории мебели -->
+    <section class="categories">
+      <div class="container">
+        <h2 class="section-title">Категории мебели</h2>
+        
+        <div class="categories-grid">
+          <a href="/catalog/living-room.html" class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1932&q=80')"></div>
+            <div class="category-content">
+              <h3>Гостиная</h3>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </a>
+          
+          <a href="/catalog/bedroom.html" class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80')"></div>
+            <div class="category-content">
+              <h3>Спальня</h3>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </a>
+          
+          <a href="/catalog/kitchen.html" class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1935&q=80')"></div>
+            <div class="category-content">
+              <h3>Кухня</h3>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </a>
+          
+          <a href="/catalog/bathroom.html" class="category-card">
+            <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1970&q=80')"></div>
+            <div class="category-content">
+              <h3>Ванная</h3>
+              <i class="fas fa-arrow-right"></i>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Популярные товары -->
+    <section class="featured-products">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Популярные товары</h2>
+          <a href="/catalog.html" class="btn btn-outline">Смотреть все</a>
+        </div>
+        
+        <div class="products-grid">
+          <div class="product-card">
+            <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
+            <div class="product-content">
+              <div class="product-category">Гостиная</div>
+              <h3 class="product-title">Диван Модерн</h3>
+              <div class="product-price">45 000 ₽</div>
+            </div>
+            <div class="product-footer">
+              <a href="/product/divan-modern.html" class="btn btn-outline btn-full">
+                <i class="fas fa-eye"></i>
+                Подробнее
+              </a>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
+            <div class="product-content">
+              <div class="product-category">Спальня</div>
+              <h3 class="product-title">Кровать Комфорт</h3>
+              <div class="product-price">38 000 ₽</div>
+            </div>
+            <div class="product-footer">
+              <a href="/product/krovat-komfort.html" class="btn btn-outline btn-full">
+                <i class="fas fa-eye"></i>
+                Подробнее
+              </a>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1577140917170-285929fb55b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')"></div>
+            <div class="product-content">
+              <div class="product-category">Кухня</div>
+              <h3 class="product-title">Стол Минимал</h3>
+              <div class="product-price">22 000 ₽</div>
+            </div>
+            <div class="product-footer">
+              <a href="/product/stol-minimal.html" class="btn btn-outline btn-full">
+                <i class="fas fa-eye"></i>
+                Подробнее
+              </a>
+            </div>
+          </div>
+          
+          <div class="product-card">
+            <div class="product-image" style="background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1965&q=80')"></div>
+            <div class="product-content">
+              <div class="product-category">Гостиная</div>
+              <h3 class="product-title">Кресло Релакс</h3>
+              <div class="product-price">18 500 ₽</div>
+            </div>
+            <div class="product-footer">
+              <a href="/product/kreslo-relax.html" class="btn btn-outline btn-full">
+                <i class="fas fa-eye"></i>
+                Подробнее
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Услуги -->
+    <section class="services">
+      <div class="container">
+        <h2 class="section-title">Наши услуги</h2>
+        <p class="section-subtitle">Мы предлагаем комплексный подход к созданию интерьера вашей мечты</p>
+        
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-paint-brush"></i>
+            </div>
+            <h3 class="service-title">Дизайн интерьера</h3>
+            <p class="service-description">Создаем уникальные дизайн-проекты, учитывая ваши предпочтения и особенности помещения.</p>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-hammer"></i>
+            </div>
+            <h3 class="service-title">Ремонт под ключ</h3>
+            <p class="service-description">Выполняем полный цикл ремонтных работ от демонтажа до финальной отделки.</p>
+          </div>
+          
+          <div class="service-card">
+            <div class="service-icon">
+              <i class="fas fa-ruler-combined"></i>
+            </div>
+            <h3 class="service-title">Проектирование мебели</h3>
+            <p class="service-description">Разрабатываем индивидуальную мебель по вашим размерам и пожеланиям.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Отзывы -->
+    <section class="testimonials">
+      <div class="container">
+        <h2 class="section-title">Отзывы клиентов</h2>
+        <p class="section-subtitle">Что говорят о нас наши клиенты</p>
+        
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">"Заказывала диван и кресла для гостиной. Качество мебели превзошло все ожидания, а доставка была выполнена точно в срок."</p>
+            <p class="testimonial-author">Анна Смирнова</p>
+          </div>
+          
+          <div class="testimonial-card">
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+            </div>
+            <p class="testimonial-text">"Обратился за услугой дизайна интерьера. Результат просто потрясающий! Дизайнер учел все наши пожелания и предложил интересные решения."</p>
+            <p class="testimonial-author">Иван Петров</p>
+          </div>
+          
+          <div class="testimonial-card">
+            <div class="testimonial-rating">
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="fas fa-star"></i>
+              <i class="far fa-star"></i>
+            </div>
+            <p class="testimonial-text">"Заказывали ремонт под ключ. Работа выполнена качественно и в срок. Отдельное спасибо за внимание к деталям и чистоту после ремонта."</p>
+            <p class="testimonial-author">Мария Иванова</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Призыв к действию -->
+    <section class="cta">
+      <div class="container">
+        <h2 class="cta-title">Готовы создать интерьер своей мечты?</h2>
+        <p class="cta-text">Свяжитесь с нами сегодня, чтобы получить бесплатную консультацию и узнать, как мы можем помочь вам с выбором мебели, дизайном интерьера или ремонтом.</p>
+        <div class="cta-buttons">
+          <button class="btn btn-primary btn-lg" id="ctaContactBtn">Связаться с нами</button>
+          <a href="/catalog.html" class="btn btn-outline btn-lg">Смотреть каталог</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Подвал сайта -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-about">
+          <h3 class="footer-title">VKmebel</h3>
+          <p class="footer-text">Создаем уютные и функциональные пространства с индивидуальным подходом к каждому клиенту.</p>
+          <div class="social-links">
+            <button class="btn-icon">
+              <i class="fab fa-facebook-f"></i>
+            </button>
+            <button class="btn-icon">
+              <i class="fab fa-instagram"></i>
+            </button>
+            <button class="btn-icon">
+              <i class="fab fa-twitter"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="footer-nav">
+          <h3 class="footer-title">Навигация</h3>
+          <ul class="footer-links">
+            <li><a href="/catalog.html">Каталог</a></li>
+            <li><a href="/design.html">Дизайн</a></li>
+            <li><a href="/renovation.html">Ремонт</a></li>
+            <li><a href="/about.html">О нас</a></li>
+            <li><a href="/contact.html">Контакты</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h3 class="footer-title">Контакты</h3>
+          <ul class="footer-info">
+            <li>г. Москва, ул. Примерная, д. 123</li>
+            <li>+7 (999) 123-45-67</li>
+            <li>info@vkmebel.ru</li>
+            <li>Пн-Пт: 9:00-20:00</li>
+            <li>Сб-Вс: 10:00-18:00</li>
+          </ul>
+        </div>
+
+        <div class="footer-subscribe">
+          <h3 class="footer-title">Подписка на новости</h3>
+          <p class="footer-text">Подпишитесь на нашу рассылку, чтобы получать новости о скидках и акциях.</p>
+          <div class="subscribe-form">
+            <input type="email" placeholder="Ваш email" class="form-input">
+            <button class="btn btn-primary">Подписаться</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© <span id="currentYear"></span> VKmebel. Все права защищены.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Модальное окно "Связаться с нами" -->
+  <div class="modal" id="contactModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Связаться с нами</h3>
+        <button class="modal-close" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="name">Ваше имя</label>
+            <input type="text" id="name" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="tel" id="phone" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label for="message">Сообщение</label>
+            <textarea id="message" class="form-input" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Отправить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
