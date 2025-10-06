@@ -1,64 +1,117 @@
-let totalWidth = 0;
+// Диагностика пазов панели с подсчетом общего количества и длины
+
+let totalLength = 0;
 let totalCuts = 0;
-let debug = "";
 
-// === Рекурсивный поиск панелей ===
-function searchPanels(obj) {
-  if (!obj) return;
+// Функция вычисления длины одного паза по траектории
+function getCutLength(cut) {
+  if (!cut.Trajectory || cut.Trajectory.Objects.Count === 0) return 0;
 
-  if (obj instanceof TFurnPanel) {
-    processPanel(obj);
-  } else if (obj.AsList) {
-    for (let i = 0; i < obj.Count; i++) {
-      searchPanels(obj[i]);
-    }
-  }
-}
+  let length = 0;
+  for (let i = 0; i < cut.Trajectory.Objects.Count; i++) {
+    const obj = cut.Trajectory.Objects[i];
 
-// === Обработка панели ===
-function processPanel(panel) {
-  const cuts = panel.Cuts;
-  if (!cuts || cuts.Count === 0) return;
-
-  for (let i = 0; i < cuts.Count; i++) {
-    const cut = cuts[i];
-    let cutWidth = 0;
-
-    if (cut.Contour && cut.Contour.Objects && cut.Contour.Objects.Count > 0) {
-      for (let j = 0; j < cut.Contour.Objects.Count; j++) {
-        const obj = cut.Contour.Objects[j];
-        if (obj.Width && obj.Width > 0) {
-          cutWidth += obj.Width;
-        }
+    if (obj instanceof TLine3D) {
+      // Прямая линия
+      const dx = obj.P2.x - obj.P1.x;
+      const dy = obj.P2.y - obj.P1.y;
+      const dz = obj.P2.z - obj.P1.z;
+      length += Math.sqrt(dx * dx + dy * dy + dz * dz);
+    } else if (obj instanceof TArc3D) {
+      // Дуга
+      length += Math.abs(obj.Radius * obj.Angle);
+    } else {
+      // Другие типы элементов (например, сплайны)
+      try {
+        length += obj.Length;
+      } catch (e) {
+        // Пропускаем, если нет свойства Length
       }
     }
-
-    if (cutWidth > 0) {
-      totalCuts++;
-      totalWidth += cutWidth;
-      debug += `Панель: ${panel.Name}\nПаз: ${cut.Name}\nШирина: ${cutWidth.toFixed(2)} мм\n\n`;
-    }
   }
+  return length;
 }
 
-// === Основной цикл ===
-if (Model.SelectionCount > 0) {
+if (Model.SelectionCount === 0) {
+  alert("Выбери хотя бы одну панель в модели.");
+} else {
+  let foundPanel = false;
+
   for (let i = 0; i < Model.SelectionCount; i++) {
-    const sel = Model.Selections[i];
-    if (sel instanceof TFurnPanel) {
-      processPanel(sel);
-    } else if (sel.AsList) {
-      searchPanels(sel);
+    const obj = Model.Selections[i];
+    if (obj instanceof TFurnPanel) {
+      foundPanel = true;
+      const panel = obj;
+
+      let info = "📘 Панель: " + panel.Name + "\n";
+
+      const collections = ["Cuts", "PanelCuts", "Operations", "Features", "Contours", "Objects", "Children"];
+
+      let foundSomething = false;
+
+      for (let name of collections) {
+        try {
+          const c = panel[name];
+          if (c && typeof c.Count === "number" && c.Count > 0) {
+            foundSomething = true;
+            info += `\n=== ${name} (${c.Count}) ===\n`;
+
+            for (let j = 0; j < c.Count; j++) {
+              const item = c[j];
+              info += `[${j}] ${item.ClassName || "без типа"}\n`;
+
+              // основные данные
+              const keys = ["Name", "Type", "Length", "Depth", "Width", "Thickness"];
+              for (let k of keys) {
+                try {
+                  if (typeof item[k] !== "undefined") {
+                    info += `   ${k}: ${item[k]}\n`;
+                  }
+                } catch {}
+              }
+
+              // если есть траектория — считаем длину
+              try {
+                if (item.Trajectory) {
+                  const len = getCutLength(item);
+                  totalLength += len;
+                  totalCuts++;
+                  info += `   Trajectory.Length: ${len.toFixed(2)} мм\n`;
+                  if (item.Trajectory.Objects && item.Trajectory.Objects.Count > 0) {
+                    info += `   Trajectory.Objects.Count: ${item.Trajectory.Objects.Count}\n`;
+                  }
+                }
+              } catch {}
+
+              // если есть контур — покажем его
+              try {
+                if (item.Contour && item.Contour.Objects) {
+                  info += `   Contour.Objects.Count: ${item.Contour.Objects.Count}\n`;
+                }
+              } catch {}
+            }
+          }
+        } catch (e) {
+          info += `Ошибка доступа к ${name}\n`;
+        }
+      }
+
+      if (!foundSomething) {
+        info += "\n❌ Похоже, пазы не найдены ни в одном свойстве панели.";
+      }
+
+      // Добавляем общую информацию
+      if (totalCuts > 0) {
+        info += `\n📏 Общее количество пазов: ${totalCuts}\n📏 Общая длина пазов: ${totalLength.toFixed(2)} мм`;
+      }
+
+      // показываем результат
+      alert(info.length > 1000 ? info.substring(0, 1000) + "\n... (обрезано)" : info);
+      break;
     }
   }
-} else {
-  // если ничего не выделено — считаем по всей модели
-  Model.forEachPanel(panel => processPanel(panel));
-}
 
-// === Результат ===
-if (totalCuts === 0) {
-  alert("❌ Пазы (вырезы) не найдены. Убедись, что на панели есть AddCut().");
-} else {
-  alert(`✅ Найдено пазов: ${totalCuts}\n📏 Общая длина (ширина) пазов: ${totalWidth.toFixed(2)} мм\n\n${debug}`);
+  if (!foundPanel) {
+    alert("Выделенный объект не является панелью.");
+  }
 }
