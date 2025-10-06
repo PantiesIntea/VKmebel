@@ -1,84 +1,107 @@
-let totalLen = 0;
-let totalCuts = 0;
+// Скрипт для диагностики пазов панели в БАЗИС
+// Определяет свойства первого найденного паза, чтобы понять, как считать длину
 
-function getCutLen(cut) {
-  let len = 0;
+if (Model.SelectionCount === 0) {
+  alert("Выбери хотя бы одну панель.");
+} else {
+  let found = false;
 
-  // 1. Попытка via Trajectory.Length
-  if (cut.Trajectory && typeof cut.Trajectory.Length === "number") {
-    len += cut.Trajectory.Length;
-  }
-
-  // 2. Попытка via Trajectory.Objects
-  if (cut.Trajectory && cut.Trajectory.Objects && cut.Trajectory.Objects.Count) {
-    for (let i = 0; i < cut.Trajectory.Objects.Count; i++) {
-      let obj = cut.Trajectory.Objects[i];
-      if (typeof obj.Length === "number") {
-        len += obj.Length;
-      } else {
-        // попробовать как линия между P1 и P2
-        if (obj.P1 && obj.P2) {
-          let dx = obj.P2.x - obj.P1.x;
-          let dy = obj.P2.y - obj.P1.y;
-          let dz = obj.P2.z - obj.P1.z;
-          len += Math.sqrt(dx*dx + dy*dy + dz*dz);
-        }
-      }
-    }
-  }
-
-  // 3. Попытка via cut.Length
-  if (typeof cut.Length === "number") {
-    len += cut.Length;
-  }
-
-  // 4. Если всё ещё ноль — попробуем считать по cut.Contour (2D контур)
-  if (len === 0 && cut.Contour && cut.Contour.Objects && cut.Contour.Objects.Count) {
-    for (let i = 0; i < cut.Contour.Objects.Count; i++) {
-      let co = cut.Contour.Objects[i];
-      if (typeof co.ObjLength === "function") {
-        len += co.ObjLength();
-      } else if (co.Pos1 && co.Pos2) {
-        let dx = co.Pos2.x - co.Pos1.x;
-        let dy = co.Pos2.y - co.Pos1.y;
-        len += Math.sqrt(dx*dx + dy*dy);
-      }
-    }
-  }
-
-  return len;
-}
-
-function process(panel) {
-  if (!panel.Cuts || panel.Cuts.Count === 0) return;
-  for (let i = 0; i < panel.Cuts.Count; i++) {
-    let c = panel.Cuts[i];
-    let l = getCutLen(c);
-    totalLen += l;
-    totalCuts++;
-  }
-}
-
-// обход как раньше (всех или выбранных панелей)
-if (Model.SelectionCount > 0) {
   for (let i = 0; i < Model.SelectionCount; i++) {
-    let obj = Model.Selections[i];
-    if (obj instanceof TFurnPanel) process(obj);
-    else if (obj.AsList) searchList(obj);
-  }
-} else {
-  Model.forEachPanel(p => process(p));
-}
-function searchList(list) {
-  for (let i = 0; i < list.Count; i++) {
-    let obj = list[i];
-    if (obj instanceof TFurnPanel) process(obj);
-    else if (obj.AsList) searchList(obj);
-  }
-}
+    const obj = Model.Selections[i];
 
-if (totalCuts > 0) {
-  alert(`Пазы: ${totalCuts}\nОбщая длина: ${totalLen.toFixed(2)} мм`);
-} else {
-  alert("Пазы (вырезы) не найдены.");
+    if (obj instanceof TFurnPanel) {
+      const panel = obj;
+
+      if (panel.Cuts && panel.Cuts.Count > 0) {
+        found = true;
+        const cut = panel.Cuts[0];
+
+        let info = "🔍 Информация о первом пазе панели '" + panel.Name + "'\n\n";
+        info += "Тип объекта: " + (cut.ClassName || "неизвестно") + "\n";
+        info += "Всего пазов на панели: " + panel.Cuts.Count + "\n\n";
+
+        // Основные свойства
+        info += "=== Основные свойства Cut ===\n";
+        for (let key in cut) {
+          try {
+            let value = cut[key];
+            if (typeof value === "object") value = "[object]";
+            info += key + " = " + value + "\n";
+          } catch (e) {
+            info += key + " = (ошибка при чтении)\n";
+          }
+        }
+
+        // Проверим Trajectory
+        if (cut.Trajectory) {
+          info += "\n=== Trajectory ===\n";
+          try {
+            info += "Trajectory.Length = " + cut.Trajectory.Length + "\n";
+            info += "Trajectory.Objects.Count = " + (cut.Trajectory.Objects ? cut.Trajectory.Objects.Count : 0) + "\n";
+          } catch (e) {
+            info += "Ошибка при чтении Trajectory\n";
+          }
+
+          if (cut.Trajectory.Objects && cut.Trajectory.Objects.Count > 0) {
+            info += "\n--- Trajectory.Objects ---\n";
+            for (let i = 0; i < cut.Trajectory.Objects.Count; i++) {
+              let obj = cut.Trajectory.Objects[i];
+              info += "[" + i + "] тип: " + (obj.ClassName || "неизвестно") + "\n";
+              for (let k in obj) {
+                try {
+                  let v = obj[k];
+                  if (typeof v === "object") v = "[object]";
+                  info += "  " + k + " = " + v + "\n";
+                } catch (e) {
+                  info += "  " + k + " = (ошибка)\n";
+                }
+              }
+              info += "\n";
+            }
+          }
+        } else {
+          info += "\nTrajectory отсутствует\n";
+        }
+
+        // Проверим Contour
+        if (cut.Contour) {
+          info += "\n=== Contour ===\n";
+          try {
+            info += "Contour.Objects.Count = " + (cut.Contour.Objects ? cut.Contour.Objects.Count : 0) + "\n";
+          } catch (e) {
+            info += "Ошибка при чтении Contour\n";
+          }
+
+          if (cut.Contour.Objects && cut.Contour.Objects.Count > 0) {
+            info += "\n--- Contour.Objects ---\n";
+            for (let i = 0; i < cut.Contour.Objects.Count; i++) {
+              let obj = cut.Contour.Objects[i];
+              info += "[" + i + "] тип: " + (obj.ClassName || "неизвестно") + "\n";
+              for (let k in obj) {
+                try {
+                  let v = obj[k];
+                  if (typeof v === "object") v = "[object]";
+                  info += "  " + k + " = " + v + "\n";
+                } catch (e) {
+                  info += "  " + k + " = (ошибка)\n";
+                }
+              }
+              info += "\n";
+            }
+          }
+        } else {
+          info += "\nContour отсутствует\n";
+        }
+
+        // Сохраняем в файл (чтобы не обрезало alert)
+        system.askWriteTextFile("txt", info);
+        alert("Файл с данными о пазе сохранён.\nПришли мне его содержимое — я скажу, как считать длину.");
+        break;
+      }
+    }
+  }
+
+  if (!found) {
+    alert("Панель выбрана, но пазы (Cuts) не найдены.");
+  }
 }
