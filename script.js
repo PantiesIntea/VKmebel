@@ -1,107 +1,77 @@
-// Скрипт для диагностики пазов панели в БАЗИС
-// Определяет свойства первого найденного паза, чтобы понять, как считать длину
+// Диагностика структуры панели в Bazis Script
+// Определяет, где именно находятся пазы, вырезы и другие операции
 
 if (Model.SelectionCount === 0) {
-  alert("Выбери хотя бы одну панель.");
+  alert("Выбери хотя бы одну панель в модели.");
 } else {
-  let found = false;
+  let foundPanel = false;
 
   for (let i = 0; i < Model.SelectionCount; i++) {
     const obj = Model.Selections[i];
-
     if (obj instanceof TFurnPanel) {
+      foundPanel = true;
       const panel = obj;
+      let info = "🔍 Диагностика панели '" + panel.Name + "'\n\n";
 
-      if (panel.Cuts && panel.Cuts.Count > 0) {
-        found = true;
-        const cut = panel.Cuts[0];
-
-        let info = "🔍 Информация о первом пазе панели '" + panel.Name + "'\n\n";
-        info += "Тип объекта: " + (cut.ClassName || "неизвестно") + "\n";
-        info += "Всего пазов на панели: " + panel.Cuts.Count + "\n\n";
-
-        // Основные свойства
-        info += "=== Основные свойства Cut ===\n";
-        for (let key in cut) {
-          try {
-            let value = cut[key];
-            if (typeof value === "object") value = "[object]";
-            info += key + " = " + value + "\n";
-          } catch (e) {
-            info += key + " = (ошибка при чтении)\n";
-          }
-        }
-
-        // Проверим Trajectory
-        if (cut.Trajectory) {
-          info += "\n=== Trajectory ===\n";
-          try {
-            info += "Trajectory.Length = " + cut.Trajectory.Length + "\n";
-            info += "Trajectory.Objects.Count = " + (cut.Trajectory.Objects ? cut.Trajectory.Objects.Count : 0) + "\n";
-          } catch (e) {
-            info += "Ошибка при чтении Trajectory\n";
-          }
-
-          if (cut.Trajectory.Objects && cut.Trajectory.Objects.Count > 0) {
-            info += "\n--- Trajectory.Objects ---\n";
-            for (let i = 0; i < cut.Trajectory.Objects.Count; i++) {
-              let obj = cut.Trajectory.Objects[i];
-              info += "[" + i + "] тип: " + (obj.ClassName || "неизвестно") + "\n";
-              for (let k in obj) {
-                try {
-                  let v = obj[k];
-                  if (typeof v === "object") v = "[object]";
-                  info += "  " + k + " = " + v + "\n";
-                } catch (e) {
-                  info += "  " + k + " = (ошибка)\n";
-                }
-              }
-              info += "\n";
+      info += "=== Основные свойства панели ===\n";
+      for (let key in panel) {
+        try {
+          let val = panel[key];
+          if (typeof val === "object") {
+            if (val && typeof val.Count === "number") {
+              info += `${key} = [object, Count=${val.Count}]\n`;
+            } else {
+              info += `${key} = [object]\n`;
             }
+          } else {
+            info += `${key} = ${val}\n`;
           }
-        } else {
-          info += "\nTrajectory отсутствует\n";
+        } catch (e) {
+          info += `${key} = (ошибка чтения)\n`;
         }
-
-        // Проверим Contour
-        if (cut.Contour) {
-          info += "\n=== Contour ===\n";
-          try {
-            info += "Contour.Objects.Count = " + (cut.Contour.Objects ? cut.Contour.Objects.Count : 0) + "\n";
-          } catch (e) {
-            info += "Ошибка при чтении Contour\n";
-          }
-
-          if (cut.Contour.Objects && cut.Contour.Objects.Count > 0) {
-            info += "\n--- Contour.Objects ---\n";
-            for (let i = 0; i < cut.Contour.Objects.Count; i++) {
-              let obj = cut.Contour.Objects[i];
-              info += "[" + i + "] тип: " + (obj.ClassName || "неизвестно") + "\n";
-              for (let k in obj) {
-                try {
-                  let v = obj[k];
-                  if (typeof v === "object") v = "[object]";
-                  info += "  " + k + " = " + v + "\n";
-                } catch (e) {
-                  info += "  " + k + " = (ошибка)\n";
-                }
-              }
-              info += "\n";
-            }
-          }
-        } else {
-          info += "\nContour отсутствует\n";
-        }
-
-        // Сохраняем в файл (чтобы не обрезало alert)
-        system.askWriteTextFile("txt", info);
-        alert("Файл с данными о пазе сохранён.\nПришли мне его содержимое — я скажу, как считать длину.");
-        break;
       }
+
+      // Проверим возможные коллекции, если есть
+      const possibleCollections = [
+        "Cuts", "PanelCuts", "Operations", "Features", "Contours", "Objects", "Children"
+      ];
+
+      info += "\n\n=== Проверка возможных коллекций ===\n";
+      for (let name of possibleCollections) {
+        try {
+          const c = panel[name];
+          if (c && typeof c.Count === "number") {
+            info += `${name}: Count = ${c.Count}\n`;
+
+            for (let j = 0; j < c.Count; j++) {
+              const item = c[j];
+              info += `  [${j}] тип = ${item.ClassName || "неизвестно"}\n`;
+
+              // посмотрим ключевые поля
+              for (let k in item) {
+                try {
+                  if (["Name", "Type", "Length", "Depth", "Width"].includes(k)) {
+                    info += `    ${k} = ${item[k]}\n`;
+                  }
+                } catch {}
+              }
+            }
+          } else {
+            info += `${name}: нет или Count = 0\n`;
+          }
+        } catch (e) {
+          info += `${name}: ошибка доступа\n`;
+        }
+      }
+
+      // Сохраняем в файл
+      system.askWriteTextFile("txt", info);
+      alert("Файл с диагностикой панели сохранён.\nПришли его содержимое — я скажу, где находятся пазы.");
+      break;
     }
   }
 
-  if (!found) {
-    alert("Панель выбрана, но пазы (Cuts) не найдены.");
+  if (!foundPanel) {
+    alert("Выделенный объект не является панелью.");
   }
 }
