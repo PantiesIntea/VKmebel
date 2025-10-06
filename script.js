@@ -1,5 +1,4 @@
-// Диагностика структуры панели в Bazis Script
-// Определяет, где именно находятся пазы, вырезы и другие операции
+// Диагностика пазов панели (всё в alert)
 
 if (Model.SelectionCount === 0) {
   alert("Выбери хотя бы одну панель в модели.");
@@ -11,62 +10,65 @@ if (Model.SelectionCount === 0) {
     if (obj instanceof TFurnPanel) {
       foundPanel = true;
       const panel = obj;
-      let info = "🔍 Диагностика панели '" + panel.Name + "'\n\n";
 
-      info += "=== Основные свойства панели ===\n";
-      for (let key in panel) {
-        try {
-          let val = panel[key];
-          if (typeof val === "object") {
-            if (val && typeof val.Count === "number") {
-              info += `${key} = [object, Count=${val.Count}]\n`;
-            } else {
-              info += `${key} = [object]\n`;
-            }
-          } else {
-            info += `${key} = ${val}\n`;
-          }
-        } catch (e) {
-          info += `${key} = (ошибка чтения)\n`;
-        }
-      }
+      let info = "📘 Панель: " + panel.Name + "\n";
 
-      // Проверим возможные коллекции, если есть
-      const possibleCollections = [
+      const collections = [
         "Cuts", "PanelCuts", "Operations", "Features", "Contours", "Objects", "Children"
       ];
 
-      info += "\n\n=== Проверка возможных коллекций ===\n";
-      for (let name of possibleCollections) {
+      let foundSomething = false;
+
+      for (let name of collections) {
         try {
           const c = panel[name];
-          if (c && typeof c.Count === "number") {
-            info += `${name}: Count = ${c.Count}\n`;
+          if (c && typeof c.Count === "number" && c.Count > 0) {
+            foundSomething = true;
+            info += `\n=== ${name} (${c.Count}) ===\n`;
 
             for (let j = 0; j < c.Count; j++) {
               const item = c[j];
-              info += `  [${j}] тип = ${item.ClassName || "неизвестно"}\n`;
+              info += `[${j}] ${item.ClassName || "без типа"}\n`;
 
-              // посмотрим ключевые поля
-              for (let k in item) {
+              // основные данные
+              const keys = ["Name", "Type", "Length", "Depth", "Width", "Thickness"];
+              for (let k of keys) {
                 try {
-                  if (["Name", "Type", "Length", "Depth", "Width"].includes(k)) {
-                    info += `    ${k} = ${item[k]}\n`;
+                  if (typeof item[k] !== "undefined") {
+                    info += `   ${k}: ${item[k]}\n`;
                   }
                 } catch {}
               }
+
+              // если есть траектория — покажем её
+              try {
+                if (item.Trajectory) {
+                  info += `   Trajectory.Length: ${item.Trajectory.Length}\n`;
+                  if (item.Trajectory.Objects && item.Trajectory.Objects.Count > 0) {
+                    info += `   Trajectory.Objects.Count: ${item.Trajectory.Objects.Count}\n`;
+                  }
+                }
+              } catch {}
+
+              // если есть контур — покажем его
+              try {
+                if (item.Contour && item.Contour.Objects) {
+                  info += `   Contour.Objects.Count: ${item.Contour.Objects.Count}\n`;
+                }
+              } catch {}
             }
-          } else {
-            info += `${name}: нет или Count = 0\n`;
           }
         } catch (e) {
-          info += `${name}: ошибка доступа\n`;
+          info += `Ошибка доступа к ${name}\n`;
         }
       }
 
-      // Сохраняем в файл
-      system.askWriteTextFile("txt", info);
-      alert("Файл с диагностикой панели сохранён.\nПришли его содержимое — я скажу, где находятся пазы.");
+      if (!foundSomething) {
+        info += "\n❌ Похоже, пазы не найдены ни в одном свойстве панели.";
+      }
+
+      // показываем результат
+      alert(info.length > 1000 ? info.substring(0, 1000) + "\n... (обрезано)" : info);
       break;
     }
   }
